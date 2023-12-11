@@ -34,8 +34,8 @@ function renderCars(data){
             if(a%2==0){
                 document.querySelector('.cars').innerHTML+= '<div class="row" id="carrow"></div>'
             }
-            document.getElementById('carrow').innerHTML+=`    
-                    <div class="card m-3 p-1" style="width: 48%">
+            document.getElementById('carrow').innerHTML+=`<div class="col-md-6 col-12 mb-3"> 
+                    <div class="card p-1 w-100 h-100 ">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -49,6 +49,7 @@ function renderCars(data){
                                 </div>
                             </div>
                         </div>
+                    </div>
                     </div>
                
             `

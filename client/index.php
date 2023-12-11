@@ -43,7 +43,8 @@
             
         }
         img{
-            width: 300px;
+            max-width: 300px;
+            width: 100%;
         }
         .data{
             margin-left: 10px;
