@@ -19,8 +19,8 @@
             <div class="col-md-6 col-12 d-flex flex-column">
 
                 <button type="button" class="btn btn-outline-secondary w-50 mt-5 m-1" onclick="add()">Add</button>
-                <button type="button" class="btn btn-outline-secondary w-50 m-1">Delete</button>
-                <button type="button" class="btn btn-outline-secondary w-50 m-1" onclick="compare()">Compare</button>
+                <button type="button" id="compare" class="btn btn-outline-secondary w-50 m-1" onclick="compare()">Compare</button>
+                
             </div>
             
     </div>  
@@ -48,6 +48,7 @@
 </div>
 
 <script>
+
     getData('../server/cars.php',renderCars)
     
 function renderCars(data){
@@ -71,8 +72,8 @@ function renderCars(data){
                                         More
                                     </button>
                                     <div class="form-check my-3">
-                                        <input class="form-check-input" type="checkbox" name="compare" value="${obj.id}" id="flexCheckDefault">
-                                        <label class="form-check-label" for="flexCheckDefault">
+                                        <input class="form-check-input" type="checkbox" name="compare" value="${obj.id}" id="flexCheckDefault" onchange="detect()">
+                                        <label class="form-check-label" for="flexCheckDefault" >
                                             Compare
                                         </label>
                                     </div>
@@ -117,30 +118,36 @@ function filterModel(data){
     for(let obj of data){
         document.getElementById('model').innerHTML+=`
         <option>${obj.model}</option>
-        `
-        
+        ` 
     }
+    
 }
 function filterByBrand(domObj){
         const brand=domObj.value
         let a=domObj.value
-        console.log(a)
+        
         getData('../server/filteredByBrand.php?brand='+brand,renderCars)
         getData('../server/filteredByModel.php?brand='+brand,filterModel)
         
         if(a == 0){getData('../server/cars.php',renderCars)}
 }
-function filterByModels(domObj){
+function filterByModels(){
         const brand = document.getElementById('brand').value
         const model = document.getElementById('model').value
+        let a = document.getElementById('model').value
+
+        if(a == 0){getData('../server/filteredByBrand.php?brand='+brand, renderCars)}
+        else{
         getData('../server/filteredModels.php?brand='+brand+'&model='+model, renderCars)
+        }
+        
 }
 
 function showDetail(x){
     getData("../server/details.php?id="+x, showModal)
 }
 function showModal(data){
-   
+    document.querySelector(".modal-content").classList.remove("custom-width")
     document.querySelector('.modal-title').innerHTML=data[0].Brand +" "+data[0].Model
     document.querySelector('.modal-body').innerHTML=`
     <div>
@@ -185,15 +192,99 @@ function showModal(data){
             <p>Horsepower: ${data[0].Horsepower}bhp</p>
         </div>
     </div>
+    
     `
 }
-function compare(){
-    let domObj = document.querySelectorAll('[name="compare"]:checked')
-    for(let obj of domObj){
-        console.log(obj.value)
+
+function detect(){
+    let c = document.querySelectorAll('[name="compare"]:checked').length
+    console.log(c)
+    
+    if(c>2){
+        document.getElementById('compare').setAttribute("data-bs-container", "body") 
+        document.getElementById('compare').setAttribute("data-bs-toggle","popover")
+        document.getElementById('compare').setAttribute("data-bs-placement","right")
+        document.getElementById('compare').setAttribute("data-bs-content","Warning!")
+        document.getElementById('compare').removeAttribute("data-bs-toggle","modal") 
+        document.getElementById('compare').removeAttribute("data-bs-target","#exampleModal")
+        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
+        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
+    }else{
+        document.getElementById('compare').removeAttribute("data-bs-container") 
+        document.getElementById('compare').removeAttribute("data-bs-toggle")
+        document.getElementById('compare').removeAttribute("data-bs-placement")
+        document.getElementById('compare').removeAttribute("data-bs-content")
+        document.getElementById('compare').setAttribute("data-bs-toggle","modal") 
+        document.getElementById('compare').setAttribute("data-bs-target","#exampleModal")
+        let c = document.querySelectorAll('[name="compare"]:checked')       
+
     }
+
 }
 
+function compare(){
+    
+    let selectedCars = document.querySelectorAll('[name="compare"]:checked')
+    if(selectedCars.length == 0){return}
+    let id1=selectedCars[0].value
+    let id2=selectedCars[1].value
+
+    getData(`../server/compare.php?id1=${id1}&id2=${id2}`,renderCompared)
+
+}
+function renderCompared(data){
+    document.querySelector(".modal-content").classList.add("custom-width")
+    console.log(data[0].id, data[1].id)
+    document.querySelector('.modal-body').innerHTML ='';
+    document.querySelector('.modal-title').innerHTML="Compare"
+    for(let obj of data){
+    document.querySelector('.modal-body').innerHTML+=`
+    <div>
+        <div id="carousel">
+            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
+                </div>
+                <div class="carousel-item">
+                <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        
+
+
+        <div id="data">
+            <p>Brand: ${obj.Brand}</p>
+            <p>Model: ${obj.Model}</p>
+            <p>Type: ${obj.Type}</p>
+            <p>Exterior color: ${obj.Exterior_Color}</p>
+            <p>Interior color: ${obj.Interior_Color}</p>
+            <p>Body details: ${obj.Body_Details}</p>
+            <p>Engine size: ${obj.Engine_Size}</p>
+            <p>Horsepower: ${obj.Horsepower}bhp</p>
+        </div>
+    </div>
+    
+    `
+    }
+}
 
 
 </script>
