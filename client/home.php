@@ -17,8 +17,7 @@
                 </form>
             </div>
             <div class="col-md-6 col-12 d-flex flex-column">
-
-                <button type="button" class="btn btn-outline-secondary w-50 mt-5 m-1" onclick="add()">Add</button>
+                <br>
                 <button type="button" id="compare" class="btn btn-outline-secondary w-50 m-1" onclick="compare()">Compare</button>
                 
             </div>
@@ -234,40 +233,14 @@ function compare(){
 }
 function renderCompared(data){
     document.querySelector(".modal-content").classList.add("custom-width")
-    console.log(data[0].id, data[1].id)
-    document.querySelector('.modal-body').innerHTML ='';
+    document.querySelector('.modal-body').innerHTML ='<div class="row" id="compareBody"></div>';
     document.querySelector('.modal-title').innerHTML="Compare"
     for(let obj of data){
-    document.querySelector('.modal-body').innerHTML+=`
+    document.getElementById('compareBody').innerHTML+=`
+    <div class="col-6">
     <div>
-        <div id="carousel">
-            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
-            <div class="carousel-indicators">
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-            </div>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
-                </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="visually-hidden">Next</span>
-            </button>
-        </div>
         
+        <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
 
 
         <div id="data">
@@ -281,7 +254,7 @@ function renderCompared(data){
             <p>Horsepower: ${obj.Horsepower}bhp</p>
         </div>
     </div>
-    
+    </div>
     `
     }
 }
