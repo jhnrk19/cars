@@ -18,8 +18,8 @@
             </div>
             <div class="col-md-6 col-12 d-flex flex-column">
                 <br>
-                <button type="button" id="compare" class="btn btn-outline-secondary w-50 m-1" onclick="compare()">Compare</button>
-                
+                <button type="button" id="compare" class="btn btn-outline-secondary w-50 m-1" data-bs-trigger="focus" data-bs-content="Warning!" data-bs-placement="right" data-bs-toggle ="popover" data-bs-container = "body" onclick="compare()">Compare</button>
+                <!--data-bs-trigger="focus" data-bs-content="Warning!" data-bs-placement="right" data-bs-toggle ="popover" data-bs-container = "body"-->
             </div>
             
     </div>  
@@ -89,8 +89,6 @@ function renderCars(data){
             a++
         }
 }
-
-
 
 //select load:
 getData('../server/brands.php',renderBrands)
@@ -195,43 +193,65 @@ function showModal(data){
     `
 }
 
+        const popoverTrigger = document.querySelector('[data-bs-toggle="popover"]')
+        const popover =new bootstrap.Popover(popoverTrigger)
 function detect(){
+    
     let c = document.querySelectorAll('[name="compare"]:checked').length
     console.log(c)
     
-    if(c>2){
+    if(!c || c<2 || c>2){
+
+        console.log("set")
+        document.getElementById('compare').removeAttribute("data-bs-toggle","modal")
+        document.getElementById('compare').removeAttribute("data-bs-target","#exampleModal")
         document.getElementById('compare').setAttribute("data-bs-container", "body") 
         document.getElementById('compare').setAttribute("data-bs-toggle","popover")
         document.getElementById('compare').setAttribute("data-bs-placement","right")
         document.getElementById('compare').setAttribute("data-bs-content","Warning!")
-        document.getElementById('compare').removeAttribute("data-bs-toggle","modal") 
-        document.getElementById('compare').removeAttribute("data-bs-target","#exampleModal")
-        const popoverTriggerList = document.querySelectorAll('[data-bs-toggle="popover"]')
-        const popoverList = [...popoverTriggerList].map(popoverTriggerEl => new bootstrap.Popover(popoverTriggerEl))
-    }else{
+        document.getElementById('compare').setAttribute("data-bs-trigger","focus")
+        popover.enable()
+        
+
+        
+    }
+    else{
+        console.log("remove")
+        
+        popover.disable()
         document.getElementById('compare').removeAttribute("data-bs-container") 
         document.getElementById('compare').removeAttribute("data-bs-toggle")
         document.getElementById('compare').removeAttribute("data-bs-placement")
         document.getElementById('compare').removeAttribute("data-bs-content")
+
         document.getElementById('compare').setAttribute("data-bs-toggle","modal") 
         document.getElementById('compare').setAttribute("data-bs-target","#exampleModal")
-        let c = document.querySelectorAll('[name="compare"]:checked')       
+        let c = document.querySelectorAll('[name="compare"]:checked')  
 
+        
     }
 
 }
 
 function compare(){
-    
     let selectedCars = document.querySelectorAll('[name="compare"]:checked')
-    if(selectedCars.length == 0){return}
-    let id1=selectedCars[0].value
-    let id2=selectedCars[1].value
+    if(selectedCars.length == 0){
+        detect()
+        return
+    }
+    let id1=selectedCars[0]?.value
+    let id2=selectedCars[1]?.value
+    if(!id1 || !id2){
+       console.log(id1, "nincs")
+    return
 
+    }
+    console.log("vagy")
     getData(`../server/compare.php?id1=${id1}&id2=${id2}`,renderCompared)
 
 }
 function renderCompared(data){
+    console.log("rendercomp")
     document.querySelector(".modal-content").classList.add("custom-width")
     document.querySelector('.modal-body').innerHTML ='<div class="row" id="compareBody"></div>';
     document.querySelector('.modal-title').innerHTML="Compare"
