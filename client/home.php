@@ -47,9 +47,13 @@
 </div>
 
 <script>
-
-    getData('../server/cars.php',renderCars)
+let ids= []
     
+getData('../server/cars.php',renderCars)
+getData('../server/brands.php',renderBrands)
+getData('../server/models.php',renderModels)
+
+
 function renderCars(data){
         let a=2
         document.querySelector('.cars').innerHTML=''
@@ -78,7 +82,7 @@ function renderCars(data){
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <img src="${obj.IMG}" alt="" title="${obj.Brand} ${obj.Model}">
+                                    <img src="${obj.IMG}" alt="" title="${obj.Brand} ${obj.Model}" style="max-height: 250px; max-width:500px" !important>
                                 </div>
                             </div>
                         </div>
@@ -89,11 +93,6 @@ function renderCars(data){
             a++
         }
 }
-
-//select load:
-getData('../server/brands.php',renderBrands)
-getData('../server/models.php',renderModels)
-
 
 function renderBrands(data){
     for(let obj of data){
@@ -153,17 +152,13 @@ function showModal(data){
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-                <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
-                <img src="${data[0].IMG}" class="d-block w-100 h-100" alt="...">
+                <img src="${data[0].IMG}" class="d-block w-100 h-100 img-fluid" alt="..." id="image" style="max-height: 250px; max-width:500px" !important>
                 </div>
                 <div class="carousel-item">
-                <img src="${data[0].IMG}" class="d-block w-100 h-100" alt="...">
-                </div>
-                <div class="carousel-item">
-                <img src="${data[0].IMG}" class="d-block w-100 h-100" alt="...">
+                <img src="${data[0].IMG2}" class="d-block w-100 h-100 img-fluid" alt="..." id="image" style="max-height: 250px; max-width:500px" !important>
                 </div>
             </div>
             <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -193,16 +188,19 @@ function showModal(data){
     `
 }
 
-        const popoverTrigger = document.querySelector('[data-bs-toggle="popover"]')
-        const popover =new bootstrap.Popover(popoverTrigger)
+const popoverTrigger = document.querySelector('[data-bs-toggle="popover"]')
+const popover =new bootstrap.Popover(popoverTrigger)
 function detect(){
-    
-    let c = document.querySelectorAll('[name="compare"]:checked').length
-    console.log(c)
-    
-    if(!c || c<2 || c>2){
-
-        console.log("set")
+        let selectedCars = document.querySelectorAll('[name="compare"]:checked')
+        
+        if(selectedCars){
+            ids.push(selectedCars[0].value)
+            selectedCars.length==2 && ids.push(selectedCars[1]?.value)
+        }
+        let set = new Set(ids)
+        ids= Array.from(set)
+        
+    if(ids.length<2 || ids.length>2){
         document.getElementById('compare').removeAttribute("data-bs-toggle","modal")
         document.getElementById('compare').removeAttribute("data-bs-target","#exampleModal")
         document.getElementById('compare').setAttribute("data-bs-container", "body") 
@@ -211,47 +209,33 @@ function detect(){
         document.getElementById('compare').setAttribute("data-bs-content","Warning!")
         document.getElementById('compare').setAttribute("data-bs-trigger","focus")
         popover.enable()
-        
-
-        
     }
     else{
-        console.log("remove")
-        
         popover.disable()
         document.getElementById('compare').removeAttribute("data-bs-container") 
         document.getElementById('compare').removeAttribute("data-bs-toggle")
         document.getElementById('compare').removeAttribute("data-bs-placement")
         document.getElementById('compare').removeAttribute("data-bs-content")
-
         document.getElementById('compare').setAttribute("data-bs-toggle","modal") 
         document.getElementById('compare').setAttribute("data-bs-target","#exampleModal")
-        let c = document.querySelectorAll('[name="compare"]:checked')  
-
-        
     }
 
 }
 
-function compare(){
-    let selectedCars = document.querySelectorAll('[name="compare"]:checked')
-    if(selectedCars.length == 0){
-        detect()
-        return
+function initcb(){
+    let cbArr = document.querySelectorAll("input:checked")
+    for(let obj of cbArr){
+        obj.checked = false
     }
-    let id1=selectedCars[0]?.value
-    let id2=selectedCars[1]?.value
-    if(!id1 || !id2){
-       console.log(id1, "nincs")
-    return
+}
 
-    }
-    console.log("vagy")
-    getData(`../server/compare.php?id1=${id1}&id2=${id2}`,renderCompared)
-
+function compare(){  
+    detect()
+    getData(`../server/compare.php?id1=${ids[0]}&id2=${ids[1]}`,renderCompared)
+    initcb()
+    ids = []
 }
 function renderCompared(data){
-    console.log("rendercomp")
     document.querySelector(".modal-content").classList.add("custom-width")
     document.querySelector('.modal-body').innerHTML ='<div class="row" id="compareBody"></div>';
     document.querySelector('.modal-title').innerHTML="Compare"
@@ -260,7 +244,7 @@ function renderCompared(data){
     <div class="col-6">
     <div>
         
-        <img src="${obj.IMG}" class="d-block w-100 h-100" alt="...">
+        <img src="${obj.IMG}" class="d-block w-100 h-100" alt="..." style="max-height: 250px; max-width:500px" !important>
 
 
         <div id="data">
