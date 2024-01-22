@@ -211,6 +211,7 @@ function detect(){
         ids= Array.from(set)
         
     if(ids.length<2 || ids.length>2){
+        console.log(ids, "bent")
         document.getElementById('compare').removeAttribute("data-bs-toggle","modal")
         document.getElementById('compare').removeAttribute("data-bs-target","#exampleModal")
         document.getElementById('compare').setAttribute("data-bs-container", "body") 
@@ -221,6 +222,7 @@ function detect(){
         popover.enable()
     }
     else{
+        console.log(ids, "kint")
         popover.disable()
         document.getElementById('compare').removeAttribute("data-bs-container") 
         document.getElementById('compare').removeAttribute("data-bs-toggle")
