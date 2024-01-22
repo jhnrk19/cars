@@ -152,6 +152,7 @@ function filterByModels(){
 function showDetail(x){
     getData("../server/details.php?id="+x, showModal)
 }
+
 function showModal(data){
     document.querySelector(".modal-content").classList.remove("custom-width")
     document.querySelector('.modal-title').innerHTML=data[0].Brand +" "+data[0].Model
