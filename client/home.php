@@ -48,10 +48,13 @@
 
 <script>
 let ids= []
-    
+if(document.getElementById('brand').value == 0){
+            getData('../server/cars.php',renderCars)
+            document.getElementById('model').disabled=true
+}else document.getElementById('model').disabled=false
 getData('../server/cars.php',renderCars)
 getData('../server/brands.php',renderBrands)
-getData('../server/models.php',renderModels)
+
 
 
 function renderCars(data){
@@ -100,7 +103,11 @@ function renderBrands(data){
         <option>${obj.Brand}</option>
         `
     }
+    
 }
+
+getData('../server/models.php',renderModels)
+
 function renderModels(data){
     for(let obj of data){
         document.getElementById('model').innerHTML+=`
@@ -125,7 +132,10 @@ function filterByBrand(domObj){
         getData('../server/filteredByBrand.php?brand='+brand,renderCars)
         getData('../server/filteredByModel.php?brand='+brand,filterModel)
         
-        if(a == 0){getData('../server/cars.php',renderCars)}
+        if(a == 0){
+            getData('../server/cars.php',renderCars)
+            document.getElementById('model').disabled=true
+        }else document.getElementById('model').disabled=false
 }
 function filterByModels(){
         const brand = document.getElementById('brand').value
