@@ -31,8 +31,8 @@
     </div>
 
     <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
+<div class="modal fade" id="exampleModal" style="font-size: 15px;" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog d-flex">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel"></h5>
@@ -204,11 +204,14 @@ const popoverTrigger = document.querySelector('[data-bs-toggle="popover"]')
 const popover =new bootstrap.Popover(popoverTrigger)
 function detect(){
         let selectedCars = document.querySelectorAll('[name="compare"]:checked')
-        
+
+        console.log(selectedCars.length);
         if(selectedCars){
+            ids = [];
             for(let i=0;i<selectedCars.length; i++){
                 ids.push(selectedCars[i].value)
             }
+            
         }
         let set = new Set(ids)
         ids= Array.from(set)
@@ -256,23 +259,20 @@ function renderCompared(data){
     document.querySelector('.modal-title').innerHTML="Compare"
     for(let obj of data){
     document.getElementById('compareBody').innerHTML+=`
-    <div class="col-6">
-    <div>
+    <div class="col-sm-6 col-12 d-flex flex-column justify-content-between">
+            <img src="${obj.IMG}" class="img-fluid" alt="...">
+
+            <div id="data">
+                <p>Brand: ${obj.Brand}</p>
+                <p>Model: ${obj.Model}</p>
+                <p>Type: ${obj.Type}</p>
+                <p>Exterior color: ${obj.Exterior_Color}</p>
+                <p>Interior color: ${obj.Interior_Color}</p>
+                <p>Body details: ${obj.Body_Details}</p>
+                <p>Engine size: ${obj.Engine_Size}</p>
+                <p>Horsepower: ${obj.Horsepower}bhp</p>
+            </div>
         
-        <img src="${obj.IMG}" class="d-block w-100 h-100" alt="..." style="max-height: 250px; max-width:500px" !important>
-
-
-        <div id="data">
-            <p>Brand: ${obj.Brand}</p>
-            <p>Model: ${obj.Model}</p>
-            <p>Type: ${obj.Type}</p>
-            <p>Exterior color: ${obj.Exterior_Color}</p>
-            <p>Interior color: ${obj.Interior_Color}</p>
-            <p>Body details: ${obj.Body_Details}</p>
-            <p>Engine size: ${obj.Engine_Size}</p>
-            <p>Horsepower: ${obj.Horsepower}bhp</p>
-        </div>
-    </div>
     </div>
     `
     }
