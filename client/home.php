@@ -199,6 +199,7 @@ function showModal(data){
     `
 }
 
+
 const popoverTrigger = document.querySelector('[data-bs-toggle="popover"]')
 const popover =new bootstrap.Popover(popoverTrigger)
 function detect(){
