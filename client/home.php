@@ -205,8 +205,9 @@ function detect(){
         let selectedCars = document.querySelectorAll('[name="compare"]:checked')
         
         if(selectedCars){
-            ids.push(selectedCars[0].value)
-            selectedCars.length==2 && ids.push(selectedCars[1]?.value)
+            for(let i=0;i<selectedCars.length; i++){
+                ids.push(selectedCars[i].value)
+            }
         }
         let set = new Set(ids)
         ids= Array.from(set)
@@ -244,7 +245,7 @@ function initcb(){
 
 function compare(){  
     detect()
-    getData(`../server/compare.php?id1=${ids[0]}&id2=${ids[1]}`,renderCompared)
+    if(ids.length == 2) getData(`../server/compare.php?id1=${ids[0]}&id2=${ids[1]}`,renderCompared)
     initcb()
     ids = []
 }
