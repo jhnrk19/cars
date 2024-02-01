@@ -48,12 +48,13 @@
 
 <script>
 let ids= []
+getData('../server/cars.php',renderCars)
+getData('../server/brands.php',renderBrands)
+
 if(document.getElementById('brand').value == 0){
             getData('../server/cars.php',renderCars)
             document.getElementById('model').disabled=true
 }else document.getElementById('model').disabled=false
-getData('../server/cars.php',renderCars)
-getData('../server/brands.php',renderBrands)
 
 
 
