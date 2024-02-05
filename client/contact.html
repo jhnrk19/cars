@@ -24,6 +24,7 @@
 
 </main>
 
+<script src="checkUser.js"></script>
 <script>
   function sendMail(e){
       e.preventDefault()
@@ -31,10 +32,6 @@
       let s = document.getElementById("sname").value
       let em = document.getElementById("email").value
       let m = document.getElementById("message").value
-      if(!f || !s || !e || !m){
-          renderMsg('Incompeleted fields')
-          return
-      }
 
         const param={
           fname: f,
@@ -43,18 +40,26 @@
           message: m
 
         }
-        
-    const servideId='service_vpulgvk'
-    const tempaleteId='template_0pw2uwp'
-    emailjs.send(servideId,tempaleteId,param)
-    .then(res=>{
-      console.log(res)
-      renderMsg(1)
-    })
-    .catch((err)=>{
-      console.log(err)
-      renderMsg('Something went wrong! Please try again!')
-    })
+      
+        if(!checkUser(param)){
+          renderMsg(`Something went wrong, please check your: First name, Second name and Email address.<br>Please write it correctly!`)
+          return
+        }else{
+
+          const servideId='service_vpulgvk'
+          const tempaleteId='template_0pw2uwp'
+          emailjs.send(servideId,tempaleteId,param)
+          .then(res=>{
+            console.log(res)
+            renderMsg(1)
+          })
+          .catch((err)=>{
+            console.log(err)
+            renderMsg(`Something went wrong! Please try again later!<br>External server error.`)
+          })
+        }
+
+    
 
     function renderMsg(res){
       if(res == 1){
