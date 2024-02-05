@@ -1,32 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 4.9.0.1
--- https://www.phpmyadmin.net/
---
--- Gép: 127.0.0.1
--- Létrehozás ideje: 2024. Jan 18. 12:15
--- Kiszolgáló verziója: 10.4.6-MariaDB
--- PHP verzió: 7.3.8
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Adatbázis: `cars`
---
-
--- --------------------------------------------------------
-
---
--- Tábla szerkezet ehhez a táblához `car_data`
---
 
 CREATE TABLE `car_data` (
   `id` int(11) NOT NULL,
@@ -40,7 +11,7 @@ CREATE TABLE `car_data` (
   `Body_Details` varchar(28) DEFAULT NULL,
   `IMG` text DEFAULT NULL,
   `IMG2` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+)
 
 --
 -- A tábla adatainak kiíratása `car_data`
@@ -73,27 +44,10 @@ INSERT INTO `car_data` (`id`, `Brand`, `Model`, `Type`, `Interior_Color`, `Exter
 (24, 'Buick', 'LaCrosse', 'Sedan', 'Gray', 'White', '2.4L', 200, 'Comfortable, refined', 'https://i.ibb.co/nsRsDW3/buick-la-Crosse.jpg', 'https://i.ibb.co/J5rxPYy/buick-lacrosse2.jpg'),
 (25, 'Acura', 'RDX', 'SUV', 'Black', 'Red', '3.5L', 272, 'Premium, advanced tech', 'https://i.ibb.co/yFdtPWZ/acura-rdx.jpg', 'https://i.ibb.co/hLCWRgP/acura-rdx2.jpg');
 
---
--- Indexek a kiírt táblákhoz
---
 
---
--- A tábla indexei `car_data`
---
 ALTER TABLE `car_data`
   ADD PRIMARY KEY (`id`);
 
---
--- A kiírt táblák AUTO_INCREMENT értéke
---
-
---
--- AUTO_INCREMENT a táblához `car_data`
---
 ALTER TABLE `car_data`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 COMMIT;
-
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
